@@ -5,10 +5,10 @@ import javax.swing.JButton;
 import controller.ImgManager;
 import model.Cell;
 
-public class CellButton extends JButton{
+public class CellButton extends JButton {
 	private Cell cell;
 
-	public CellButton(Cell cell) {
+	public void initCellButton(Cell cell) {
 		this.cell = cell;
 	}
 
@@ -20,7 +20,7 @@ public class CellButton extends JButton{
 		this.cell = cell;
 	}
 
-	public void draw(boolean isReal) {
+	public void draw( boolean isReal) {
 		if (isReal) {
 			if (cell.getHasBomb()) {
 				drawBomb(); // draws bomb
@@ -31,21 +31,30 @@ public class CellButton extends JButton{
 				drawCurrentNumber();// draw real cell value
 			}
 		} else {
-			if (cell.isSuggestBomb()) {
-				drawFlag(); // draws flag
-			} else if (cell.isSuggestEmpty()) {
-				drawCurrentNumber(); // draws real cell value
-			} else {
-				drawClosed();// draws closed cell
-			}
+			try {
+				if (cell.isSuggestBomb()) {
 
+					drawFlag(); // draws flag
+				}
+
+				else {
+					if (cell.isSuggestEmpty())
+
+					{
+						drawCurrentNumber(); // draws real cell value
+					} else {
+						drawClosed();// draws closed cell
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 	}
 
 	private void drawClosed() {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	public void drawBang() {

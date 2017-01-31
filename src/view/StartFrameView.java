@@ -3,9 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -25,8 +23,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 
 import model.Board;
+import java.awt.GridLayout;
 
 /**
  * Class represents start Frame for game.
@@ -35,11 +37,13 @@ import model.Board;
  * @version 1.1 since 28.01.2017
  */
 public class StartFrameView {
-
-	private final JPanel controlPanel = new JPanel();;
-	private JTextField jt_mines, jt_time;
-	final JFrame frame = new JFrame();
-	private BoardPanel board = new BoardPanel(new Board(10, 10, 10));
+	private final JFrame frame = new JFrame();
+	private final JPanel controlPanel = new JPanel();
+	private BoardPanel boardPanel = new BoardPanel();
+	private final JTextField jt_mines = new JTextField();
+	private final JTextField jt_time = new JTextField();
+	private final JButton btnsmile = new JButton("");
+	private Board board = new Board(0,0, 0);
 
 	/**
 	 * initializes a start window
@@ -48,38 +52,47 @@ public class StartFrameView {
 
 		frame.setTitle("Saper by Roman Grupskyi");
 		frame.setSize(211, 292);
+		frame.getContentPane().setLayout(new BorderLayout());
+		boardPanel.setLayout(new GridLayout());
+		boardPanel.setBorder(new CompoundBorder(new EmptyBorder(7, 7, 7, 7),
+				new BevelBorder(BevelBorder.LOWERED, null, null, null, null)));
 
-		BorderLayout borderLayout = new BorderLayout();
-		board.setLayout(new GridLayout(10, 10));
-		board.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(7, 7, 7, 7),
-				BorderFactory.createLoweredBevelBorder()));
-		setmenu();
-		frame.setLayout(borderLayout);
-		jt_mines = new JTextField();
-		jt_time = new JTextField();
+		boardPanel.initBoardPanel(board);
+		CellButton[][] cellButtons = boardPanel.getCellButtons();
+
+		if (cellButtons != null) {
+			for (int x = 0; x != cellButtons.length; x++) {
+				for (int y = 0; y != cellButtons[0].length; y++) {
+					boardPanel.add(cellButtons[x][y]);
+				}
+			}
+		}
+
 		jt_mines.setColumns(3);
-		jt_time.setColumns(3);
-		jt_mines.setBorder(BorderFactory.createLoweredBevelBorder());
-		jt_time.setBorder(BorderFactory.createLoweredBevelBorder());
 		jt_mines.setFont(new Font("DigtalFont.TTF", Font.BOLD, 20));
-		jt_time.setFont(new Font("DigtalFont.TTF", Font.BOLD, 20));
+		jt_mines.setBorder(BorderFactory.createLoweredBevelBorder());
 		jt_mines.setHorizontalAlignment(SwingConstants.LEFT);
 		jt_mines.setForeground(Color.RED);
-		jt_time.setForeground(Color.RED);
 		jt_mines.setBackground(Color.black);
+		jt_time.setColumns(3);
+		jt_time.setBorder(BorderFactory.createLoweredBevelBorder());
+		jt_time.setFont(new Font("DigtalFont.TTF", Font.BOLD, 20));
+		jt_time.setForeground(Color.RED);
 		jt_time.setBackground(Color.black);
-		JButton btnsmile = new JButton();
+
 		btnsmile.setIcon(new ImageIcon("resources\\new game.gif"));
-		// btnsmile.setBorder(BorderFactory.createLoweredSoftBevelBorder());
 		btnsmile.addActionListener(null);
+
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 		controlPanel.add(jt_mines);
 		controlPanel.add(btnsmile);
 		controlPanel.add(jt_time);
 
+		setmenu();
 		frame.getContentPane().add(controlPanel, BorderLayout.NORTH);
+		frame.getContentPane().add(boardPanel, BorderLayout.CENTER);
+		// boardPanel.setLayout(new GridLayout(1, 0, 0, 0));
 
-		frame.getContentPane().add(board, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		centre(frame);
 

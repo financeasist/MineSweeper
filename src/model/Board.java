@@ -1,17 +1,24 @@
 package model;
 
+import java.util.Random;
+
+import controller.ImgManager;
+
 public class Board {
 	private int countOfBombs;
-	private int width;
-	private int height;
+	private int boardWidth;
+	private int boardHeight;
 	private Cell[][] cells;
 	private boolean isReal = false;
 
 	public Board(int width, int height, int countOfBombs) {
-		this.width = width;
-		this.height = height;
+		this.boardWidth = width;
+		this.boardHeight = height;
 		this.cells = new Cell[width][height];
 		this.countOfBombs = countOfBombs;
+		fillBoardEmptyCells();
+		setBombs();
+		
 	}
 
 	public int getCountOfBombs() {
@@ -23,19 +30,19 @@ public class Board {
 	}
 
 	public int getWidth() {
-		return width;
+		return boardWidth;
 	}
 
 	public void setWidth(int width) {
-		this.width = width;
+		this.boardWidth = width;
 	}
 
 	public int getHeight() {
-		return height;
+		return boardHeight;
 	}
 
 	public void setHeight(int height) {
-		this.height = height;
+		this.boardHeight = height;
 	}
 
 	public Cell[][] getCells() {
@@ -54,6 +61,30 @@ public class Board {
 		this.isReal = real;
 	}
 	
-	
+	/**
+	 *  initializes board with empty cells values;
+	 */
+	public void fillBoardEmptyCells(){
+			for (int x = 0; x < boardWidth; x++) {
+				for (int y = 0; y < boardHeight; y++) {
+					cells[x][y] = new Cell(false, x, y, ImgManager.BUTTON_EMPTY, this);
+				}
+			}
+	}
+	/**
+	 * method sets bombs on the board by chance, according to countOfBombs;
+	 */
+	public void setBombs() {
+		int bombCount=0;
+		Random random = new Random();
+		while (bombCount<countOfBombs){
+			int	randomX = random.nextInt(boardWidth);
+			int	randomY = random.nextInt(boardHeight);
+			if(cells[randomX][randomY].getHasBomb()!=true){
+				cells[randomX][randomY].setHasBomb(true);
+				bombCount++;
+			}
+		}
+	}
 	
 }
