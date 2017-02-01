@@ -3,12 +3,14 @@ package model;
 import java.util.Random;
 
 import controller.ImgManager;
+import view.CellButton;
 
 public class Board {
 	private int countOfBombs;
 	private int boardWidth;
 	private int boardHeight;
 	private Cell[][] cells;
+	private  CellButton[][] cellButtons;
 	private boolean isReal = false;
 
 	public Board(int width, int height, int countOfBombs) {
@@ -18,7 +20,14 @@ public class Board {
 		this.countOfBombs = countOfBombs;
 		fillBoardEmptyCells();
 		setBombs();
-		
+		cellButtons = new CellButton[width][height];
+		for (int x = 0; x != cellButtons.length; x++) {
+			for (int y = 0; y != cellButtons[0].length; y++) {
+				Cell cell = cells[x][y];
+				cellButtons[x][y] = new CellButton();
+				cellButtons[x][y].initCellButton(cell);
+			}
+		}
 	}
 
 	public int getCountOfBombs() {
@@ -60,7 +69,35 @@ public class Board {
 	public void setReal(boolean real) {
 		this.isReal = real;
 	}
-	
+		
+	public int getBoardWidth() {
+		return boardWidth;
+	}
+
+	public void setBoardWidth(int boardWidth) {
+		this.boardWidth = boardWidth;
+	}
+
+	public int getBoardHeight() {
+		return boardHeight;
+	}
+
+	public void setBoardHeight(int boardHeight) {
+		this.boardHeight = boardHeight;
+	}
+
+	public CellButton[][] getCellButtons() {
+		return cellButtons;
+	}
+
+	public void setCellButtons(CellButton[][] cellButtons) {
+		this.cellButtons = cellButtons;
+	}
+
+	public void setCells(Cell[][] cells) {
+		this.cells = cells;
+	}
+
 	/**
 	 *  initializes board with empty cells values;
 	 */
@@ -86,5 +123,6 @@ public class Board {
 			}
 		}
 	}
+	
 	
 }

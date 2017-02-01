@@ -1,5 +1,7 @@
 package view;
 
+import java.awt.Dimension;
+
 import javax.swing.JButton;
 
 import controller.ImgManager;
@@ -7,6 +9,14 @@ import model.Cell;
 
 public class CellButton extends JButton {
 	private Cell cell;
+
+	public CellButton() {
+		super();
+		Dimension preferredSize = new Dimension(22, 22);
+		this.setPreferredSize(preferredSize);
+		// this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_CLOSED));
+
+	}
 
 	public void initCellButton(Cell cell) {
 		this.cell = cell;
@@ -20,7 +30,7 @@ public class CellButton extends JButton {
 		this.cell = cell;
 	}
 
-	public void draw( boolean isReal) {
+	public void draw(boolean isReal) {
 		if (isReal) {
 			if (cell.getHasBomb()) {
 				drawBomb(); // draws bomb
@@ -54,7 +64,7 @@ public class CellButton extends JButton {
 	}
 
 	private void drawClosed() {
-		
+		this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_CLOSED));
 	}
 
 	public void drawBang() {

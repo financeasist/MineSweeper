@@ -23,12 +23,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 
 import model.Board;
-import java.awt.GridLayout;
 
 /**
  * Class represents start Frame for game.
@@ -38,12 +34,12 @@ import java.awt.GridLayout;
  */
 public class StartFrameView {
 	private final JFrame frame = new JFrame();
-	private final JPanel controlPanel = new JPanel();
-	private BoardPanel boardPanel = new BoardPanel();
+	private JPanel controlPanel = new JPanel();
+	private Board board = new Board(10, 10, 5);
+	private BoardPanel boardPanel = new BoardPanel(board);
 	private final JTextField jt_mines = new JTextField();
 	private final JTextField jt_time = new JTextField();
 	private final JButton btnsmile = new JButton("");
-	private Board board = new Board(0,0, 0);
 
 	/**
 	 * initializes a start window
@@ -51,23 +47,22 @@ public class StartFrameView {
 	public StartFrameView() {
 
 		frame.setTitle("Saper by Roman Grupskyi");
-		frame.setSize(211, 292);
+		// frame.setSize(211, 292);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout());
-		boardPanel.setLayout(new GridLayout());
-		boardPanel.setBorder(new CompoundBorder(new EmptyBorder(7, 7, 7, 7),
-				new BevelBorder(BevelBorder.LOWERED, null, null, null, null)));
 
-		boardPanel.initBoardPanel(board);
-		CellButton[][] cellButtons = boardPanel.getCellButtons();
+		initAndAddComponentsToControlePanel();
+		addCellButtonsToBoardPanel();
+		setmenu();
+		frame.getContentPane().add(controlPanel, BorderLayout.NORTH);
+		frame.getContentPane().add(boardPanel, BorderLayout.CENTER);
+		frame.pack();
+		centre(frame);
 
-		if (cellButtons != null) {
-			for (int x = 0; x != cellButtons.length; x++) {
-				for (int y = 0; y != cellButtons[0].length; y++) {
-					boardPanel.add(cellButtons[x][y]);
-				}
-			}
-		}
+		frame.setVisible(true);
 
+	}
+	public void initAndAddComponentsToControlePanel(){
 		jt_mines.setColumns(3);
 		jt_mines.setFont(new Font("DigtalFont.TTF", Font.BOLD, 20));
 		jt_mines.setBorder(BorderFactory.createLoweredBevelBorder());
@@ -79,25 +74,22 @@ public class StartFrameView {
 		jt_time.setFont(new Font("DigtalFont.TTF", Font.BOLD, 20));
 		jt_time.setForeground(Color.RED);
 		jt_time.setBackground(Color.black);
-
 		btnsmile.setIcon(new ImageIcon("resources\\new game.gif"));
 		btnsmile.addActionListener(null);
-
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 		controlPanel.add(jt_mines);
 		controlPanel.add(btnsmile);
 		controlPanel.add(jt_time);
-
-		setmenu();
-		frame.getContentPane().add(controlPanel, BorderLayout.NORTH);
-		frame.getContentPane().add(boardPanel, BorderLayout.CENTER);
-		// boardPanel.setLayout(new GridLayout(1, 0, 0, 0));
-
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		centre(frame);
-
-		frame.setVisible(true);
-
+	}
+	public void addCellButtonsToBoardPanel(){
+		CellButton[][] cellButtons = board.getCellButtons();
+		if (cellButtons != null) {
+			for (int x = 0; x != cellButtons.length; x++) {
+				for (int y = 0; y != cellButtons[0].length; y++) {
+					boardPanel.add(cellButtons[x][y]);
+				}
+			}
+		}
 	}
 
 	/**
