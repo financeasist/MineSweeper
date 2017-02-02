@@ -1,7 +1,5 @@
 package model;
 
-
-
 public class Cell {
 	private boolean hasBomb;
 	private boolean suggestBomb = false;
@@ -91,6 +89,7 @@ public class Cell {
 	public void setCurrentStateImgType(String currentStateImgType) {
 		this.currentStateImgType = currentStateImgType;
 	}
+
 	public boolean isEmpty() {
 		boolean empty = false;
 		if (this.bombArround == 0) {
@@ -110,23 +109,23 @@ public class Cell {
 
 		for (int deltaX = -1; deltaX <= 1; deltaX++) {
 			for (int deltaY = -1; deltaY <= 1; deltaY++) {
-				if (deltaX != 0 && deltaY != 0) {
-					int assumedX = positionX + deltaX;
-					int assumedY = positionY + deltaY;
-					if (assumedX >= 0 && assumedY >= 0 && assumedX < boardWidth && assumedY < boardHeight) {
-						Cell neibourCell = allCells[assumedX][assumedY];
-						if (neibourCell.hasBomb == true) {
-							bombCount++;
-						} else {
-							if (neibourCell.isEmpty()) {
-								neibourCell.setSuggestEmpty(true);
-								neibourCell.findCellsArround();
+
+				int assumedX = positionX + deltaX;
+				int assumedY = positionY + deltaY;
+				if (assumedX >= 0 && assumedY >= 0 && assumedX < boardWidth && assumedY < boardHeight) {
+					Cell neibourCell = allCells[assumedX][assumedY];
+					if (neibourCell.hasBomb == true) {
+						bombCount++;
+					} else {
+						if (neibourCell.isEmpty()) {
+							neibourCell.setSuggestEmpty(true);
+						//	neibourCell.findCellsArround();
 							}
 						}
 					}
 				}
 			}
-		}
+		
 		this.bombArround = bombCount;
 	}
 }
