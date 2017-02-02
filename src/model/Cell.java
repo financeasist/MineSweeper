@@ -104,7 +104,7 @@ public class Cell {
 	public void findCellsArround() {
 
 		Cell[][] allCells = board.getCells();
-		Cell thisCell = this; // allCells[positionX][positionY];
+		Cell thisCell = allCells[positionX][positionY];
 		int boardWidth = board.getBoardWidth();
 		int boardHeight = board.getBoardHeight();
 		int bombCount = 0;
@@ -116,9 +116,8 @@ public class Cell {
 				int assumedY = positionY + deltaY;
 				if (assumedX >= 0 && assumedY >= 0 && assumedX < boardWidth && assumedY < boardHeight) {
 					Cell neibourCell = allCells[assumedX][assumedY];
-					if (neibourCell.hasBomb == true) {
+					if (neibourCell.hasBomb) {
 						bombCount++;
-
 					}
 
 				}
@@ -126,5 +125,6 @@ public class Cell {
 		}
 
 		this.bombArround = bombCount;
+
 	}
 }

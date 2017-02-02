@@ -23,27 +23,33 @@ public class CellButton extends JButton {
 					cell.findCellsArround();
 					draw(true);
 					if (cell.isEmpty()) {
-						Board bord = cell.getBord();
-						CellButton[][] cellButtons = bord.getCellButtons();
-						for (CellButton[] cells : cellButtons) {
-							for (CellButton cellButton : cells) {
-								if (cellButton.getCell().isEmpty()) {
-									cellButton.getCell().findCellsArround();
-									if (!cellButton.getCell().getHasBomb())
-										cellButton.draw(true);
-								}
-							}
-						}
+						showNeibourEmptyCells();
 					}
 				} else {
 					showBang();
 				}
 			}
 		});
+
 	}
 
 	public void initCellButton(Cell cell) {
 		this.cell = cell;
+	}
+
+	public void showNeibourEmptyCells() {
+		Board bord = cell.getBord();
+		CellButton[][] cellButtons = bord.getCellButtons();
+		for (CellButton[] cells : cellButtons) {
+			for (CellButton cellButton : cells) {
+				if (cellButton.getCell().isEmpty()) {
+					cellButton.getCell().findCellsArround();
+					if (cellButton.getCell().isEmpty())
+						cellButton.draw(true);
+					
+				}
+			}
+		}
 	}
 
 	public void showBang() {
