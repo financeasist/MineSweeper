@@ -1,5 +1,7 @@
 package model;
 
+import view.CellButton;
+
 public class Cell {
 	private boolean hasBomb;
 	private boolean suggestBomb = false;
@@ -102,7 +104,7 @@ public class Cell {
 	public void findCellsArround() {
 
 		Cell[][] allCells = board.getCells();
-		Cell thisCell = allCells[positionX][positionY];
+		Cell thisCell = this; // allCells[positionX][positionY];
 		int boardWidth = board.getBoardWidth();
 		int boardHeight = board.getBoardHeight();
 		int bombCount = 0;
@@ -116,14 +118,13 @@ public class Cell {
 					Cell neibourCell = allCells[assumedX][assumedY];
 					if (neibourCell.hasBomb == true) {
 						bombCount++;
-						if (neibourCell.isEmpty()) {
-							neibourCell.setSuggestEmpty(true);
-						//	neibourCell.findCellsArround();
-						}
+
 					}
+
 				}
 			}
 		}
-		thisCell.bombArround = bombCount;
+
+		this.bombArround = bombCount;
 	}
 }
