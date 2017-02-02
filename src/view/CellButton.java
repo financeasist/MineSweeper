@@ -16,11 +16,12 @@ public class CellButton extends JButton {
 		super();
 		Dimension preferredSize = new Dimension(18, 18);
 		this.setPreferredSize(preferredSize);
-		this.addActionListener(new ActionListener(){
-	         public void actionPerformed(ActionEvent e) {
-	            draw(true);
-	          }          
-	       });
+		this.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cell.findCellsArround();
+				draw(true);
+			}
+		});
 	}
 
 	public void initCellButton(Cell cell) {
@@ -69,7 +70,7 @@ public class CellButton extends JButton {
 	}
 
 	private void drawClosed() {
-//		this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_CLOSED));
+		// this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_CLOSED));
 	}
 
 	public void drawBang() {
@@ -85,6 +86,32 @@ public class CellButton extends JButton {
 	}
 
 	public void drawCurrentNumber() {
-		this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_EMPTY));
+		if (cell.getBombArround() == 0) {
+			this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_EMPTY));
+		}
+		if (cell.getBombArround() == 1) {
+			this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_ONE));
+		}
+		if (cell.getBombArround() == 2) {
+			this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_TWO));
+		}
+		if (cell.getBombArround() == 3) {
+			this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_THREE));
+		}
+		if (cell.getBombArround() == 4) {
+			this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_FOUR));
+		}
+		if (cell.getBombArround() == 5) {
+			this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_FIVE));
+		}
+		if (cell.getBombArround() == 6) {
+			this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_SIX));
+		}
+		if (cell.getBombArround() == 7) {
+			this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_SEVEN));
+		}
+		if (cell.getBombArround() == 8) {
+			this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_EIGHT));
+		}
 	}
 }
