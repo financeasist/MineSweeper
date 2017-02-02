@@ -61,12 +61,12 @@ public class Cell {
 	public void setBombArround(int bombArround) {
 		this.bombArround = bombArround;
 	}
-//	public Board getBord() {
-//		return bord;
-//	}
-//	public void setBord(Board bord) {
-//		this.bord = bord;
-//	}
+	public Board getBord() {
+		return bord;
+	}
+	public void setBord(Board bord) {
+		this.bord = bord;
+	}
 	public String getCurrentStateImgType() {
 		return currentStateImgType;
 	}

@@ -22,7 +22,7 @@ public class BoardPanel extends JPanel {
 		this.cellButtons = board.getCellButtons();
 		this.isReal = board.isReal();
 		this.setLayout(new GridLayout(board.getWidth(),board.getHeight(),0,0));
-		this.setBorder(new CompoundBorder(new EmptyBorder(7, 7, 7, 7),
+		this.setBorder(new CompoundBorder(new EmptyBorder(10, 10, 10, 10),
 				new BevelBorder(BevelBorder.LOWERED, null, null, null, null)));
 	}
 

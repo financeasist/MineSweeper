@@ -20,6 +20,7 @@ public class Board {
 		this.countOfBombs = countOfBombs;
 		fillBoardEmptyCells();
 		setBombs();
+		
 		cellButtons = new CellButton[width][height];
 		for (int x = 0; x != cellButtons.length; x++) {
 			for (int y = 0; y != cellButtons[0].length; y++) {

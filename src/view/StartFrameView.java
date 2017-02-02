@@ -34,23 +34,23 @@ import model.Board;
  */
 public class StartFrameView {
 	private final JFrame frame = new JFrame();
-	private JPanel controlPanel = new JPanel();
-	private Board board = new Board(10, 10, 5);
-	private BoardPanel boardPanel = new BoardPanel(board);
+	private final JPanel controlPanel = new JPanel();
+	private static  Board board = new Board(10,10,10);;
+	private static BoardPanel boardPanel = new BoardPanel(board);;
 	private final JTextField jt_mines = new JTextField();
 	private final JTextField jt_time = new JTextField();
 	private final JButton btnsmile = new JButton("");
-
+	
 	/**
 	 * initializes a start window
 	 */
 	public StartFrameView() {
-
+		
 		frame.setTitle("Saper by Roman Grupskyi");
 		// frame.setSize(211, 292);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout());
-
+		
 		initAndAddComponentsToControlePanel();
 		addCellButtonsToBoardPanel();
 		setmenu();
@@ -69,14 +69,17 @@ public class StartFrameView {
 		jt_mines.setHorizontalAlignment(SwingConstants.LEFT);
 		jt_mines.setForeground(Color.RED);
 		jt_mines.setBackground(Color.black);
+		
 		jt_time.setColumns(3);
 		jt_time.setBorder(BorderFactory.createLoweredBevelBorder());
 		jt_time.setFont(new Font("DigtalFont.TTF", Font.BOLD, 20));
 		jt_time.setForeground(Color.RED);
 		jt_time.setBackground(Color.black);
+		
 		btnsmile.setIcon(new ImageIcon("resources\\new game.gif"));
 		btnsmile.addActionListener(null);
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
+		controlPanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		controlPanel.add(jt_mines);
 		controlPanel.add(btnsmile);
 		controlPanel.add(jt_time);
@@ -129,20 +132,22 @@ public class StartFrameView {
 
 		menuitem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setSize(211, 292);
+				boardPanel.removeAll();
+		
+			//	boardPanel.repaint();
 			}
 
 		});
 		beginner.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setSize(211, 292);
+			
 			}
 
 		});
 
 		intermediate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				frame.setSize(320, 400);
+				
 			}
 
 		});

@@ -1,6 +1,8 @@
 package view;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
@@ -12,10 +14,13 @@ public class CellButton extends JButton {
 
 	public CellButton() {
 		super();
-		Dimension preferredSize = new Dimension(22, 22);
+		Dimension preferredSize = new Dimension(18, 18);
 		this.setPreferredSize(preferredSize);
-		// this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_CLOSED));
-
+		this.addActionListener(new ActionListener(){
+	         public void actionPerformed(ActionEvent e) {
+	            draw(true);
+	          }          
+	       });
 	}
 
 	public void initCellButton(Cell cell) {
@@ -64,7 +69,7 @@ public class CellButton extends JButton {
 	}
 
 	private void drawClosed() {
-		this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_CLOSED));
+//		this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_CLOSED));
 	}
 
 	public void drawBang() {
