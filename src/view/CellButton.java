@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import controller.ImgManager;
+import model.Board;
 import model.Cell;
 
 public class CellButton extends JButton {
@@ -18,8 +19,13 @@ public class CellButton extends JButton {
 		this.setPreferredSize(preferredSize);
 		this.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cell.findCellsArround();
-				draw(true);
+				if (cell.getHasBomb() == false) {
+					cell.findCellsArround();
+					draw(true);
+					
+				} else {
+					showBang();
+				}
 			}
 		});
 	}
@@ -27,7 +33,18 @@ public class CellButton extends JButton {
 	public void initCellButton(Cell cell) {
 		this.cell = cell;
 	}
-
+	public void showBang(){
+		Cell cell = getCell();
+		cell.setCurrentStateImgType("BUTTON_BANG");
+		Board bord = cell.getBord();
+		CellButton[][] cellButtons = bord.getCellButtons();
+		for (CellButton[] cells : cellButtons) {
+			for (CellButton cellButton : cells) {
+				cellButton.getCell().findCellsArround();
+				cellButton.draw(true);
+			}
+		}
+	}
 	public Cell getCell() {
 		return cell;
 	}

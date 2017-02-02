@@ -116,16 +116,14 @@ public class Cell {
 					Cell neibourCell = allCells[assumedX][assumedY];
 					if (neibourCell.hasBomb == true) {
 						bombCount++;
-					} else {
 						if (neibourCell.isEmpty()) {
 							neibourCell.setSuggestEmpty(true);
 						//	neibourCell.findCellsArround();
-							}
 						}
 					}
 				}
 			}
-		
-		this.bombArround = bombCount;
+		}
+		thisCell.bombArround = bombCount;
 	}
 }
