@@ -33,66 +33,89 @@ import model.Board;
  * @version 1.1 since 28.01.2017
  */
 public class StartFrameView {
-	private final JFrame frame = new JFrame();
-	private final JPanel controlPanel = new JPanel();
-	private static  Board board = new Board(10,10,10);;
-	private static BoardPanel boardPanel = new BoardPanel(board);;
-	private final JTextField jt_mines = new JTextField();
-	private final JTextField jt_time = new JTextField();
-	private final JButton btnsmile = new JButton("");
-	
+	private JFrame frame;
+	private JPanel controlPanel;
+	private Board board;
+	private BoardPanel boardPanel;
+	private static JTextField jt_mines;
+	private JTextField jt_time;
+
 	/**
 	 * initializes a start window
 	 */
 	public StartFrameView() {
-		
+		initFrame();
+		initAndAddComponentsToControlePanel();
+		addCellButtonsToBoardPanel(10,10,10);
+	}
+
+	public void initFrame() {
+		frame = new JFrame();
 		frame.setTitle("Saper by Roman Grupskyi");
 		// frame.setSize(211, 292);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout());
-		
-		initAndAddComponentsToControlePanel();
-		addCellButtonsToBoardPanel();
-		setmenu();
-		frame.getContentPane().add(controlPanel, BorderLayout.NORTH);
-		frame.getContentPane().add(boardPanel, BorderLayout.CENTER);
-		frame.pack();
 		centre(frame);
-
-		frame.setVisible(true);
+		setmenu();
 
 	}
-	public void initAndAddComponentsToControlePanel(){
+
+	public void initAndAddComponentsToControlePanel() {
+		jt_mines = new JTextField();
+		jt_time = new JTextField();
+		JButton btnsmile = new JButton("");
+		controlPanel = new JPanel();
 		jt_mines.setColumns(3);
 		jt_mines.setFont(new Font("DigtalFont.TTF", Font.BOLD, 20));
 		jt_mines.setBorder(BorderFactory.createLoweredBevelBorder());
 		jt_mines.setHorizontalAlignment(SwingConstants.LEFT);
 		jt_mines.setForeground(Color.RED);
 		jt_mines.setBackground(Color.black);
-		
 		jt_time.setColumns(3);
 		jt_time.setBorder(BorderFactory.createLoweredBevelBorder());
 		jt_time.setFont(new Font("DigtalFont.TTF", Font.BOLD, 20));
 		jt_time.setForeground(Color.RED);
 		jt_time.setBackground(Color.black);
-		
+
 		btnsmile.setIcon(new ImageIcon("resources\\new game.gif"));
-		btnsmile.addActionListener(null);
+		btnsmile.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				addCellButtonsToBoardPanel(10,10,10);
+			}
+		});
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 		controlPanel.setBorder(BorderFactory.createLoweredBevelBorder());
 		controlPanel.add(jt_mines);
 		controlPanel.add(btnsmile);
 		controlPanel.add(jt_time);
+		frame.getContentPane().add(controlPanel, BorderLayout.NORTH);
+		frame.setVisible(true);
 	}
-	public void addCellButtonsToBoardPanel(){
+
+	public void addCellButtonsToBoardPanel(int width, int height, int bombCount) {
+		System.out.println(" start addCellButtonsToBoardPanel()");
+		setBombCountIntoControlPanel(bombCount);
+		if (boardPanel != null) {
+			frame.getContentPane().remove(boardPanel);
+		}
+		board = new Board(width, height, bombCount);
+		boardPanel = new BoardPanel(board);
 		CellButton[][] cellButtons = board.getCellButtons();
 		if (cellButtons != null) {
 			for (int x = 0; x != cellButtons.length; x++) {
 				for (int y = 0; y != cellButtons[0].length; y++) {
 					boardPanel.add(cellButtons[x][y]);
+
 				}
 			}
 		}
+		boardPanel.revalidate();
+		frame.getContentPane().add(boardPanel, BorderLayout.CENTER);
+		frame.pack();
+		//frame.revalidate();
+		
 	}
 
 	/**
@@ -116,7 +139,6 @@ public class StartFrameView {
 		status.add(intermediate);
 		status.add(expert);
 		status.add(custom);
-
 		game.add(menuitem);
 		game.addSeparator();
 		game.add(beginner);
@@ -126,28 +148,25 @@ public class StartFrameView {
 		game.addSeparator();
 		game.add(exit);
 		help.add(helpitem);
-
 		bar.add(game);
 		bar.add(help);
 
 		menuitem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boardPanel.removeAll();
-		
-			//	boardPanel.repaint();
+				addCellButtonsToBoardPanel(2,2,1);
 			}
 
 		});
 		beginner.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			
+				addCellButtonsToBoardPanel(10,10,10);
 			}
 
 		});
 
 		intermediate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				addCellButtonsToBoardPanel(20,20,30);
 			}
 
 		});
@@ -184,5 +203,9 @@ public class StartFrameView {
 		int newY = (them.height - us.height) / 2;
 		w.setLocation(newX, newY);
 
+	}
+	public static void setBombCountIntoControlPanel(Integer bombCount) {
+		jt_mines.setText(bombCount.toString());
+		jt_mines.repaint();
 	}
 }

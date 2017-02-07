@@ -3,8 +3,11 @@ package view;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
 import controller.ImgManager;
 import model.Board;
@@ -17,17 +20,57 @@ public class CellButton extends JButton {
 		super();
 		Dimension preferredSize = new Dimension(18, 18);
 		this.setPreferredSize(preferredSize);
-		this.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (cell.getHasBomb() == false) {
-					cell.findCellsArround();
-					draw(true);
-					if (cell.isEmpty()) {
-						showNeibourEmptyCells();
+		this.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int mouseButton = e.getButton();
+				if (mouseButton == 1) {
+					if (!cell.isBomb()) {
+						cell.setSuggestEmpty(true);
+						cell.getBord().unSelectCells();
+						cell.findCellsArround();
+						draw(true);
+						if (cell.isEmpty()) {
+							showEmpty();
+						}
+
+					} else {
+						showBang();
 					}
-				} else {
-					showBang();
 				}
+				if (mouseButton == 3) {
+					if (cell.isSuggestBomb()) {
+						cell.setSuggestBomb(false);
+						draw(false);
+					} else {
+						cell.setSuggestBomb(true);
+						draw(false);
+						Board bord = cell.getBord();
+						if (bord.isFinish(bord.getCountOfBombs())) {
+							drowCongretulate();
+						}
+					}
+				}
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+
 			}
 		});
 
@@ -37,17 +80,25 @@ public class CellButton extends JButton {
 		this.cell = cell;
 	}
 
-	public void showNeibourEmptyCells() {
+	public void drowCongretulate() {
 		Board bord = cell.getBord();
 		CellButton[][] cellButtons = bord.getCellButtons();
 		for (CellButton[] cells : cellButtons) {
 			for (CellButton cellButton : cells) {
-				if (cellButton.getCell().isEmpty()) {
-					cellButton.getCell().findCellsArround();
-					if (cellButton.getCell().isEmpty())
-						cellButton.draw(true);
-					
-				}
+				cellButton.draw(true);
+			}
+		}
+		JOptionPane.showMessageDialog(null, "congratulations! You Win!");
+	}
+
+	public void showEmpty() {
+		CellButton[][] cellButtons = cell.getBord().getCellButtons();
+
+		for (CellButton[] cells : cellButtons) {
+			for (CellButton cellButton : cells) {
+				// cellButton.getCell().findCellsArround();
+				if (cellButton.getCell().isNeedsToOpen())
+					cellButton.draw(true);
 			}
 		}
 	}
@@ -62,6 +113,7 @@ public class CellButton extends JButton {
 				cellButton.draw(true);
 			}
 		}
+		JOptionPane.showMessageDialog(null, "It was bomb! You lose!");
 	}
 
 	public Cell getCell() {
@@ -74,7 +126,7 @@ public class CellButton extends JButton {
 
 	public void draw(boolean isReal) {
 		if (isReal) {
-			if (cell.getHasBomb()) {
+			if (cell.isBomb()) {
 				drawBomb(); // draws bomb
 				if ("BUTTON_BANG".equals(cell.getCurrentStateImgType())) {
 					drawBang(); // draws bang
@@ -85,7 +137,6 @@ public class CellButton extends JButton {
 		} else {
 			try {
 				if (cell.isSuggestBomb()) {
-
 					drawFlag(); // draws flag
 				}
 
@@ -106,7 +157,7 @@ public class CellButton extends JButton {
 	}
 
 	private void drawClosed() {
-		// this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_CLOSED));
+		this.setIcon(null);
 	}
 
 	public void drawBang() {

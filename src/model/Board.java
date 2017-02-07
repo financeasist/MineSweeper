@@ -10,7 +10,7 @@ public class Board {
 	private int boardWidth;
 	private int boardHeight;
 	private Cell[][] cells;
-	private  CellButton[][] cellButtons;
+	private CellButton[][] cellButtons;
 	private boolean isReal = false;
 
 	public Board(int width, int height, int countOfBombs) {
@@ -20,13 +20,50 @@ public class Board {
 		this.countOfBombs = countOfBombs;
 		fillBoardEmptyCells();
 		setBombs();
-		
+		unSelectCells();
 		cellButtons = new CellButton[width][height];
 		for (int x = 0; x != cellButtons.length; x++) {
 			for (int y = 0; y != cellButtons[0].length; y++) {
 				Cell cell = cells[x][y];
 				cellButtons[x][y] = new CellButton();
 				cellButtons[x][y].initCellButton(cell);
+			}
+		}
+
+	}
+
+	public void unSelectCells() {
+		for (Cell[] cellsWidth : cells) {
+			for (Cell cell : cellsWidth) {
+				cell.setWasSelected(false);
+
+			}
+		}
+	}
+
+	/**
+	 * initializes board with empty cells values;
+	 */
+	public void fillBoardEmptyCells() {
+		for (int x = 0; x < boardWidth; x++) {
+			for (int y = 0; y < boardHeight; y++) {
+				cells[x][y] = new Cell(false, x, y, ImgManager.BUTTON_EMPTY, this);
+			}
+		}
+	}
+
+	/**
+	 * method sets bombs on the board by chance, according to countOfBombs;
+	 */
+	public void setBombs() {
+		int bombCount = 0;
+		Random random = new Random();
+		while (bombCount < countOfBombs) {
+			int randomX = random.nextInt(boardWidth);
+			int randomY = random.nextInt(boardHeight);
+			if (cells[randomX][randomY].isBomb() != true) {
+				cells[randomX][randomY].setHasBomb(true);
+				bombCount++;
 			}
 		}
 	}
@@ -70,7 +107,7 @@ public class Board {
 	public void setReal(boolean real) {
 		this.isReal = real;
 	}
-		
+
 	public int getBoardWidth() {
 		return boardWidth;
 	}
@@ -99,31 +136,21 @@ public class Board {
 		this.cells = cells;
 	}
 
-	/**
-	 *  initializes board with empty cells values;
-	 */
-	public void fillBoardEmptyCells(){
-			for (int x = 0; x < boardWidth; x++) {
-				for (int y = 0; y < boardHeight; y++) {
-					cells[x][y] = new Cell(false, x, y, ImgManager.BUTTON_EMPTY, this);
-				}
-			}
-	}
-	/**
-	 * method sets bombs on the board by chance, according to countOfBombs;
-	 */
-	public void setBombs() {
-		int bombCount=0;
-		Random random = new Random();
-		while (bombCount<countOfBombs){
-			int	randomX = random.nextInt(boardWidth);
-			int	randomY = random.nextInt(boardHeight);
-			if(cells[randomX][randomY].getHasBomb()!=true){
-				cells[randomX][randomY].setHasBomb(true);
-				bombCount++;
+	public boolean isFinish(int bombCount) {
+		boolean finish = false;
+		int count = 0;
+		for (Cell[] row : cells) {
+			for (Cell cell : row) {
+				boolean isRightBomb = cell.isSuggestBomb() && cell.isBomb();
+				// boolean isRightEmpty = cell.isSuggestEmpty() &&
+				// !cell.isBomb();
+				if (isRightBomb)
+					count++;
 			}
 		}
+		if (count == bombCount)
+			finish = true;
+		return finish;
+
 	}
-	
-	
 }
