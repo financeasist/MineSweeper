@@ -2,10 +2,8 @@ package view;
 
 import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 
 import model.Board;
 
@@ -16,8 +14,8 @@ public class BoardPanel extends JPanel {
 		super();
 		this.board = board;
 		this.setLayout(new GridLayout(board.getWidth(),board.getHeight(),0,0));
-		this.setBorder(new CompoundBorder(new EmptyBorder(10, 10, 10, 10),
-				new BevelBorder(BevelBorder.LOWERED, null, null, null, null)));
+		this.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10),
+				BorderFactory.createLoweredBevelBorder()));
 	}
 
 

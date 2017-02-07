@@ -23,8 +23,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 
+import commons.Constants;
+import controller.TimerActionListener;
 import model.Board;
+import model.Cell;
 
 /**
  * Class represents start Frame for game.
@@ -39,6 +43,44 @@ public class StartFrameView {
 	private BoardPanel boardPanel;
 	private static JTextField jt_mines;
 	private JTextField jt_time;
+	private static Timer timer;
+	private boolean intermediateState;
+	private boolean beginerState;
+	private boolean expertState;
+	
+	
+
+	public boolean isIntermediateState() {
+		return intermediateState;
+	}
+
+	public void setIntermediateState(boolean intermediateState) {
+		this.intermediateState = intermediateState;
+	}
+
+	public boolean isBeginerState() {
+		return beginerState;
+	}
+
+	public void setBeginerState(boolean beginerState) {
+		this.beginerState = beginerState;
+	}
+
+	public boolean isExpertState() {
+		return expertState;
+	}
+
+	public void setExpertState(boolean expertState) {
+		this.expertState = expertState;
+	}
+
+	public static Timer getTimerInstance() {
+		ActionListener listener = new TimerActionListener();
+		if (timer == null) {
+			timer = new Timer(1000, listener);
+		}
+		return timer;
+	}
 
 	/**
 	 * initializes a start window
@@ -46,18 +88,27 @@ public class StartFrameView {
 	public StartFrameView() {
 		initFrame();
 		initAndAddComponentsToControlePanel();
-		addCellButtonsToBoardPanel(10,10,10);
+		addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EASY, Constants.BOARD_HEIGHT_EASY,
+				Constants.COUNT_OF_BOMBS_EASY);
 	}
 
 	public void initFrame() {
 		frame = new JFrame();
 		frame.setTitle("Saper by Roman Grupskyi");
-		// frame.setSize(211, 292);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new BorderLayout());
 		centre(frame);
 		setmenu();
 
+	}
+
+	public void initTimer() {
+		Timer timer = StartFrameView.getTimerInstance();
+		timer.stop();
+		ActionListener[] actionListeners = timer.getActionListeners();
+		TimerActionListener listener = (TimerActionListener) actionListeners[0];
+		listener.resetCount();
+		listener.setTextField(jt_time);
 	}
 
 	public void initAndAddComponentsToControlePanel() {
@@ -76,13 +127,13 @@ public class StartFrameView {
 		jt_time.setFont(new Font("DigtalFont.TTF", Font.BOLD, 20));
 		jt_time.setForeground(Color.RED);
 		jt_time.setBackground(Color.black);
-
+		jt_time.setText("000");
 		btnsmile.setIcon(new ImageIcon("resources\\new game.gif"));
 		btnsmile.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				addCellButtonsToBoardPanel(10,10,10);
+				insertBoardPanelDependsOnSelectedMenu();
 			}
 		});
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
@@ -107,15 +158,13 @@ public class StartFrameView {
 			for (int x = 0; x != cellButtons.length; x++) {
 				for (int y = 0; y != cellButtons[0].length; y++) {
 					boardPanel.add(cellButtons[x][y]);
-
 				}
 			}
 		}
 		boardPanel.revalidate();
 		frame.getContentPane().add(boardPanel, BorderLayout.CENTER);
+		initTimer();
 		frame.pack();
-		//frame.revalidate();
-		
 	}
 
 	/**
@@ -124,7 +173,7 @@ public class StartFrameView {
 	public void setmenu() {
 		JMenuBar bar = new JMenuBar();
 		JMenu game = new JMenu("Game");
-		JMenuItem menuitem = new JMenuItem("new game");
+		JMenuItem newGame = new JMenuItem("new game");
 		final JCheckBoxMenuItem beginner = new JCheckBoxMenuItem("Begineer");
 		final JCheckBoxMenuItem intermediate = new JCheckBoxMenuItem("Intermediate");
 		final JCheckBoxMenuItem expert = new JCheckBoxMenuItem("Expert");
@@ -132,43 +181,65 @@ public class StartFrameView {
 		final JMenuItem exit = new JMenuItem("Exit");
 		final JMenu help = new JMenu("Help");
 		final JMenuItem helpitem = new JMenuItem("Help");
-
 		ButtonGroup status = new ButtonGroup();
-		frame.setJMenuBar(bar);
 		status.add(beginner);
 		status.add(intermediate);
 		status.add(expert);
 		status.add(custom);
-		game.add(menuitem);
+		game.add(newGame);
 		game.addSeparator();
 		game.add(beginner);
 		game.add(intermediate);
 		game.add(expert);
-		game.add(custom);
+		// game.add(custom);
 		game.addSeparator();
 		game.add(exit);
 		help.add(helpitem);
 		bar.add(game);
 		bar.add(help);
-
-		menuitem.addActionListener(new ActionListener() {
+		frame.setJMenuBar(bar);
+		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addCellButtonsToBoardPanel(2,2,1);
-			}
+				insertBoardPanelDependsOnSelectedMenu();
 
+			}
 		});
 		beginner.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addCellButtonsToBoardPanel(10,10,10);
-			}
+				beginerState = beginner.getState();
+				setIntermediateState(false);
+				setExpertState(false);
+				 addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EASY,
+				 Constants.BOARD_HEIGHT_EASY,
+				 Constants.COUNT_OF_BOMBS_EASY);
+				initTimer();
 
+			}
 		});
 
 		intermediate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				addCellButtonsToBoardPanel(20,20,30);
-			}
+				intermediateState = intermediate.getState();
+				setBeginerState(false);
+				setExpertState(false);
+				 addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_MEDIUM,
+				 Constants.BOARD_HEIGHT_MEDIUM,
+				 Constants.COUNT_OF_BOMBS_MEDIUM);
+				initTimer();
 
+			}
+		});
+		expert.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				expertState = expert.getState();
+				setBeginerState(false);
+				setIntermediateState(false);
+				 addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EXPERT,
+				 Constants.BOARD_HEIGHT_EXPERT,
+				 Constants.COUNT_OF_BOMBS_EXPERT);
+				initTimer();
+
+			}
 		});
 		custom.addActionListener(null);
 
@@ -180,13 +251,10 @@ public class StartFrameView {
 		});
 
 		helpitem.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "instruction");
-
 			}
 		});
-
 	}
 
 	/**
@@ -202,10 +270,30 @@ public class StartFrameView {
 		int newX = (them.width - us.width) / 2;
 		int newY = (them.height - us.height) / 2;
 		w.setLocation(newX, newY);
-
 	}
-	public static void setBombCountIntoControlPanel(Integer bombCount) {
-		jt_mines.setText(bombCount.toString());
-		jt_mines.repaint();
+
+	public static void setBombCountIntoControlPanel(Integer flagCount) {
+		jt_mines.setText(flagCount.toString());
+	//	jt_mines.repaint();
+	}
+	
+	public void insertBoardPanelDependsOnSelectedMenu() {
+		jt_time.setText("000");
+		if (isExpertState()) {
+			addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EXPERT, Constants.BOARD_HEIGHT_EXPERT,
+					Constants.COUNT_OF_BOMBS_EXPERT);
+		}else
+		if (isIntermediateState()) {
+			addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_MEDIUM, Constants.BOARD_HEIGHT_MEDIUM,
+					Constants.COUNT_OF_BOMBS_MEDIUM);
+		}else
+		if (isBeginerState()) {
+			addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EASY, Constants.BOARD_HEIGHT_EASY,
+					Constants.COUNT_OF_BOMBS_EASY);
+		} else
+			addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EASY, Constants.BOARD_HEIGHT_EASY,
+					Constants.COUNT_OF_BOMBS_EASY);
+		initTimer();
+		
 	}
 }

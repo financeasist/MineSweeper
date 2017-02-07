@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 import controller.ImgManager;
 import model.Board;
@@ -24,6 +25,8 @@ public class CellButton extends JButton {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				Timer timer = StartFrameView.getTimerInstance();
+				timer.start();
 				int mouseButton = e.getButton();
 				if (mouseButton == 1) {
 					if (!cell.isBomb()) {
@@ -36,6 +39,7 @@ public class CellButton extends JButton {
 						}
 
 					} else {
+						StartFrameView.getTimerInstance().stop();
 						showBang();
 					}
 				}
@@ -48,6 +52,7 @@ public class CellButton extends JButton {
 						draw(false);
 						Board bord = cell.getBord();
 						if (bord.isFinish(bord.getCountOfBombs())) {
+							timer.stop();
 							drowCongretulate();
 						}
 					}
@@ -85,6 +90,9 @@ public class CellButton extends JButton {
 		CellButton[][] cellButtons = bord.getCellButtons();
 		for (CellButton[] cells : cellButtons) {
 			for (CellButton cellButton : cells) {
+				if (cellButton.getCell().isSuggestBomb())
+					cellButton.drawFlag();
+				else
 				cellButton.draw(true);
 			}
 		}
@@ -113,7 +121,7 @@ public class CellButton extends JButton {
 				cellButton.draw(true);
 			}
 		}
-		JOptionPane.showMessageDialog(null, "It was bomb! You lose!");
+		JOptionPane.showMessageDialog(null, "It was à bomb! You lose!");
 	}
 
 	public Cell getCell() {
