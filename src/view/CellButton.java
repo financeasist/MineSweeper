@@ -16,6 +16,8 @@ import model.Cell;
 
 public class CellButton extends JButton {
 	private Cell cell;
+	private int allFlags;
+	private int available¿lags;
 
 	public CellButton() {
 		super();
@@ -27,6 +29,8 @@ public class CellButton extends JButton {
 			public void mouseClicked(MouseEvent e) {
 				Timer timer = StartFrameView.getTimerInstance();
 				timer.start();
+				Board board = cell.getBord();
+				allFlags = board.getCountOfBombs();
 				int mouseButton = e.getButton();
 				if (mouseButton == 1) {
 					if (!cell.isBomb()) {
@@ -46,14 +50,21 @@ public class CellButton extends JButton {
 				if (mouseButton == 3) {
 					if (cell.isSuggestBomb()) {
 						cell.setSuggestBomb(false);
+						available¿lags++;
+						StartFrameView.setBombCountIntoControlPanel(available¿lags);
 						draw(false);
 					} else {
-						cell.setSuggestBomb(true);
-						draw(false);
-						Board bord = cell.getBord();
-						if (bord.isFinish(bord.getCountOfBombs())) {
-							timer.stop();
-							drowCongretulate();
+						available¿lags = countAvailableFlags();
+						if (available¿lags > 0) {
+							cell.setSuggestBomb(true);
+							draw(false);
+							available¿lags = countAvailableFlags();
+							StartFrameView.setBombCountIntoControlPanel(available¿lags);
+							Board bord = cell.getBord();
+							if (bord.isFinish(bord.getCountOfBombs())) {
+								timer.stop();
+								drowCongretulate();
+							}
 						}
 					}
 				}
@@ -93,7 +104,7 @@ public class CellButton extends JButton {
 				if (cellButton.getCell().isSuggestBomb())
 					cellButton.drawFlag();
 				else
-				cellButton.draw(true);
+					cellButton.draw(true);
 			}
 		}
 		JOptionPane.showMessageDialog(null, "congratulations! You Win!");
@@ -101,7 +112,6 @@ public class CellButton extends JButton {
 
 	public void showEmpty() {
 		CellButton[][] cellButtons = cell.getBord().getCellButtons();
-
 		for (CellButton[] cells : cellButtons) {
 			for (CellButton cellButton : cells) {
 				// cellButton.getCell().findCellsArround();
@@ -209,4 +219,21 @@ public class CellButton extends JButton {
 			this.setIcon(ImgManager.GetImg(ImgManager.BUTTON_EIGHT));
 		}
 	}
+
+	public int countAvailableFlags() {
+		int countFlags = 0;
+		Board bord = cell.getBord();
+		Cell[][] cells = bord.getCells();
+		for (Cell[] cellsRow : cells) {
+			for (Cell cell : cellsRow) {
+				if (cell.isSuggestBomb())
+					countFlags++;
+			}
+		}
+		if (countFlags <= allFlags)
+			return allFlags - countFlags;
+		else
+			return 0;
+	}
+
 }

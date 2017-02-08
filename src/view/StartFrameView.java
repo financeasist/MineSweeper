@@ -47,8 +47,6 @@ public class StartFrameView {
 	private boolean intermediateState;
 	private boolean beginerState;
 	private boolean expertState;
-	
-	
 
 	public boolean isIntermediateState() {
 		return intermediateState;
@@ -142,9 +140,17 @@ public class StartFrameView {
 		controlPanel.add(btnsmile);
 		controlPanel.add(jt_time);
 		frame.getContentPane().add(controlPanel, BorderLayout.NORTH);
+		initTimer();
 		frame.setVisible(true);
 	}
 
+	/**
+	 * this method creates and initializes BordPanel with CellButtons
+	 * 
+	 * @param width
+	 * @param height
+	 * @param bombCount
+	 */
 	public void addCellButtonsToBoardPanel(int width, int height, int bombCount) {
 		System.out.println(" start addCellButtonsToBoardPanel()");
 		setBombCountIntoControlPanel(bombCount);
@@ -163,7 +169,6 @@ public class StartFrameView {
 		}
 		boardPanel.revalidate();
 		frame.getContentPane().add(boardPanel, BorderLayout.CENTER);
-		initTimer();
 		frame.pack();
 	}
 
@@ -209,9 +214,8 @@ public class StartFrameView {
 				beginerState = beginner.getState();
 				setIntermediateState(false);
 				setExpertState(false);
-				 addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EASY,
-				 Constants.BOARD_HEIGHT_EASY,
-				 Constants.COUNT_OF_BOMBS_EASY);
+				addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EASY, Constants.BOARD_HEIGHT_EASY,
+						Constants.COUNT_OF_BOMBS_EASY);
 				initTimer();
 
 			}
@@ -222,9 +226,8 @@ public class StartFrameView {
 				intermediateState = intermediate.getState();
 				setBeginerState(false);
 				setExpertState(false);
-				 addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_MEDIUM,
-				 Constants.BOARD_HEIGHT_MEDIUM,
-				 Constants.COUNT_OF_BOMBS_MEDIUM);
+				addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_MEDIUM, Constants.BOARD_HEIGHT_MEDIUM,
+						Constants.COUNT_OF_BOMBS_MEDIUM);
 				initTimer();
 
 			}
@@ -234,9 +237,8 @@ public class StartFrameView {
 				expertState = expert.getState();
 				setBeginerState(false);
 				setIntermediateState(false);
-				 addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EXPERT,
-				 Constants.BOARD_HEIGHT_EXPERT,
-				 Constants.COUNT_OF_BOMBS_EXPERT);
+				addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EXPERT, Constants.BOARD_HEIGHT_EXPERT,
+						Constants.COUNT_OF_BOMBS_EXPERT);
 				initTimer();
 
 			}
@@ -274,26 +276,24 @@ public class StartFrameView {
 
 	public static void setBombCountIntoControlPanel(Integer flagCount) {
 		jt_mines.setText(flagCount.toString());
-	//	jt_mines.repaint();
+		// jt_mines.repaint();
 	}
-	
+
 	public void insertBoardPanelDependsOnSelectedMenu() {
 		jt_time.setText("000");
 		if (isExpertState()) {
 			addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EXPERT, Constants.BOARD_HEIGHT_EXPERT,
 					Constants.COUNT_OF_BOMBS_EXPERT);
-		}else
-		if (isIntermediateState()) {
+		} else if (isIntermediateState()) {
 			addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_MEDIUM, Constants.BOARD_HEIGHT_MEDIUM,
 					Constants.COUNT_OF_BOMBS_MEDIUM);
-		}else
-		if (isBeginerState()) {
+		} else if (isBeginerState()) {
 			addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EASY, Constants.BOARD_HEIGHT_EASY,
 					Constants.COUNT_OF_BOMBS_EASY);
 		} else
 			addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EASY, Constants.BOARD_HEIGHT_EASY,
 					Constants.COUNT_OF_BOMBS_EASY);
 		initTimer();
-		
+
 	}
 }
