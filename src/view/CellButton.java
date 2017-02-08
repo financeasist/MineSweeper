@@ -131,6 +131,7 @@ public class CellButton extends JButton {
 				cellButton.draw(true);
 			}
 		}
+		StartFrameView.setSadBtnSmileIcon();
 		JOptionPane.showMessageDialog(null, "It was à bomb! You lose!");
 	}
 

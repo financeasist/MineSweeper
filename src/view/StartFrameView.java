@@ -43,6 +43,7 @@ public class StartFrameView {
 	private BoardPanel boardPanel;
 	private static JTextField jt_mines;
 	private JTextField jt_time;
+	private static JButton btnsmile;
 	private static Timer timer;
 	private boolean intermediateState;
 	private boolean beginerState;
@@ -112,7 +113,7 @@ public class StartFrameView {
 	public void initAndAddComponentsToControlePanel() {
 		jt_mines = new JTextField();
 		jt_time = new JTextField();
-		JButton btnsmile = new JButton("");
+		btnsmile = new JButton("");
 		controlPanel = new JPanel();
 		jt_mines.setColumns(3);
 		jt_mines.setFont(new Font("DigtalFont.TTF", Font.BOLD, 20));
@@ -131,6 +132,7 @@ public class StartFrameView {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				btnsmile.setIcon(new ImageIcon("resources\\new game.gif"));
 				insertBoardPanelDependsOnSelectedMenu();
 			}
 		});
@@ -294,6 +296,11 @@ public class StartFrameView {
 			addCellButtonsToBoardPanel(Constants.BOARD_WIDTH_EASY, Constants.BOARD_HEIGHT_EASY,
 					Constants.COUNT_OF_BOMBS_EASY);
 		initTimer();
+	}
+
+	public static void setSadBtnSmileIcon() {
+		btnsmile.setIcon(new ImageIcon("resources\\crape.gif"));
 
 	}
+
 }
