@@ -17,7 +17,7 @@ import model.Cell;
 public class CellButton extends JButton {
 	private Cell cell;
 	private int allFlags;
-	private int available¿lags;
+	private int availableFlags;
 
 	public CellButton() {
 		super();
@@ -50,16 +50,16 @@ public class CellButton extends JButton {
 				if (mouseButton == 3) {
 					if (cell.isSuggestBomb()) {
 						cell.setSuggestBomb(false);
-						available¿lags++;
-						StartFrameView.setBombCountIntoControlPanel(available¿lags);
+						availableFlags++;
+						StartFrameView.setBombCountIntoControlPanel(availableFlags);
 						draw(false);
 					} else {
-						available¿lags = countAvailableFlags();
-						if (available¿lags > 0) {
+						availableFlags = countAvailableFlags();
+						if (availableFlags > 0) {
 							cell.setSuggestBomb(true);
 							draw(false);
-							available¿lags = countAvailableFlags();
-							StartFrameView.setBombCountIntoControlPanel(available¿lags);
+							availableFlags = countAvailableFlags();
+							StartFrameView.setBombCountIntoControlPanel(availableFlags);
 							Board bord = cell.getBord();
 							if (bord.isFinish(bord.getCountOfBombs())) {
 								timer.stop();

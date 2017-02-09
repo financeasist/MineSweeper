@@ -105,14 +105,6 @@ public class Cell {
 		this.currentStateImgType = currentStateImgType;
 	}
 
-	// public Cell getNeibourCell() {
-	// return neibourCell;
-	// }
-	//
-	// public void setNeibourCell(Cell neibourCell) {
-	// this.neibourCell = neibourCell;
-	// }
-
 	public boolean isNeedsToOpen() {
 		return needsToOpen;
 	}
@@ -131,14 +123,13 @@ public class Cell {
 		Cell neibourCell;
 		System.out.println("start findCellsArround()");
 		Cell[][] allCells = board.getCells();
-
 		int boardWidth = board.getBoardWidth();
 		int boardHeight = board.getBoardHeight();
 		int bombCount = 0;
 		List<Cell> neibourCells = new ArrayList<Cell>();
+
 		for (int deltaX = -1; deltaX <= 1; deltaX++) {
 			for (int deltaY = -1; deltaY <= 1; deltaY++) {
-				// if (deltaX != 0 && deltaY != 0) {
 				int assumedX = positionX + deltaX;
 				int assumedY = positionY + deltaY;
 				if (assumedX >= 0 && assumedY >= 0 && assumedX < boardWidth && assumedY < boardHeight) {
@@ -160,11 +151,9 @@ public class Cell {
 			needsToOpen = true;
 			for (Cell cell : neibourCells) {
 				cell.findCellsArround();
-
 			}
-
 		}
 	}
 }
 
-// }
+

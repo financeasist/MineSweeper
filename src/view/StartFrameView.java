@@ -178,16 +178,17 @@ public class StartFrameView {
 	 * sets menu into Frame;
 	 */
 	public void setmenu() {
-		JMenuBar bar = new JMenuBar();
-		JMenu game = new JMenu("Game");
-		JMenuItem newGame = new JMenuItem("new game");
+		final JMenuBar bar = new JMenuBar();
+		final JMenu game = new JMenu("Game");
+		final JMenu help = new JMenu("Help");
+		final JMenuItem newGame = new JMenuItem("new game");	
+		final JMenuItem helpitem = new JMenuItem("help");
+		final JMenuItem exit = new JMenuItem("Exit");	
 		final JCheckBoxMenuItem beginner = new JCheckBoxMenuItem("Begineer");
 		final JCheckBoxMenuItem intermediate = new JCheckBoxMenuItem("Intermediate");
 		final JCheckBoxMenuItem expert = new JCheckBoxMenuItem("Expert");
 		final JCheckBoxMenuItem custom = new JCheckBoxMenuItem("Custom");
-		final JMenuItem exit = new JMenuItem("Exit");
-		final JMenu help = new JMenu("Help");
-		final JMenuItem helpitem = new JMenuItem("Help");
+		
 		ButtonGroup status = new ButtonGroup();
 		status.add(beginner);
 		status.add(intermediate);
